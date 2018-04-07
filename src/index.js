@@ -6,7 +6,7 @@ import logger from './log';
 const menuUrl = 'http://www.ravintolafactory.com/aleksi/lounas/';
 const weekdays = ['Maanantai', 'Tiistai', 'Keskiviikko', 'Torstai', 'Perjantai', 'Lauantai'];
 const allergens = ['(L+G)', '(M+G)', '(L)', '(L+VS)', '(M+G+VS+VE)'];
-const userAllergens = 'L+G';
+const userAllergens = 'L';
 
 const parseAleksiMenu = (html) => {
   const dayIndex = new Date().getDay() - 1;
@@ -46,7 +46,7 @@ const parseMenuAllergens = (text) => {
       currentLine += ')';
     }
 
-    if(currentLine.includes(userAllergens))
+    if(ii == 0 || currentLine.includes(userAllergens))
     {
       outputText += currentLine + '\n';
     }
@@ -72,11 +72,12 @@ const fetchAleksiMenu = async (url = menuUrl) => new Promise((resolve) => {
 
 (async () => {
     logger.info('Fetching Aleksi menu for today...');
-    const text = await fetchAleksiMenu();
+    const text2 = '\nEnjoy!\n';
+    const text = await fetchAleksiMenu() + text2;
     logger.info(`Result:\n${text}`);
     const payload = { text };
     request({
-      uri: 'https://hooks.slack.com/services/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',
+      uri: 'process.env.SLACK_WEBHOOK',
       method: 'POST',
       json: payload,
     }, () => logger.info('Posted menu to slack!'));
