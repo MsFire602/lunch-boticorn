@@ -37,7 +37,7 @@ const parseAleksiMenu = (html) => {
 };
 
 const parseMenuAllergens = (text) => {
-  var linesText = text.split(')');
+  const linesText = text.split(')');
   var outputText = '';
 
   for(var ii = 0, len = linesText.length; ii < len; ii++) {
@@ -52,7 +52,6 @@ const parseMenuAllergens = (text) => {
     }
   }
 
-  logger.info('-Allergens:' + outputText);
   return outputText;
 };
 
